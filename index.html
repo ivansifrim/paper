@@ -1,0 +1,56 @@
+<html>
+	<head>
+		<script type="text/javascript" src="node_modules/paper/dist/paper-full.min.js"></script>
+		<script type="text/paperscript" canvas="myCanvas">
+			function isOdd(num) { return num % 2;}
+
+			function flipNumber(num, sign){	
+				if(sign !== undefined){
+					return Math.abs(num);
+				}else{
+					return -Math.abs(num);
+				}				
+			}
+
+			function pattern1(y,times){
+				var path = new Path();
+				path.strokeColor = 'black';
+				var start = new Point(20, 200);
+				path.moveTo(start);
+				var nextpoint = start + [ 20, y ]
+				path.lineTo(nextpoint);
+
+				for(var i = 0;i < (times -1); i++){
+					path.moveTo(nextpoint);
+					isOdd(i) ? y = flipNumber(y,'-') : y = flipNumber(y)
+					path.lineTo(nextpoint + [ 20, y ]);
+					nextpoint = nextpoint + [ 20, y ];
+				}
+			}
+
+			pattern1(100,15);
+		</script>
+
+		<script type="text/javascript">
+			document.addEventListener("DOMContentLoaded", function(event) { 
+				document.getElementById("download-to-svg").onclick = function(){
+					var fileName = "custom.svg"
+					var url = "data:image/svg+xml;utf8," + encodeURIComponent(paper.project.exportSVG({asString:true}));
+					var link = document.createElement("a");
+					link.download = fileName;
+					link.href = url;
+					link.click();
+				}
+			});
+		</script>
+
+
+	</head>
+
+	<body>
+		<div>
+			<canvas id="myCanvas" width="800" height="300"></canvas>
+			<button id="download-to-svg">DOWNLOAD</button>
+		</div>
+	</body>
+</html>
